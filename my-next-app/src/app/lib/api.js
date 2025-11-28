@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "/api",    // langsung ke route handler Next.js
+  baseURL: "http://localhost:3000/api",
 });
 
 export default api;

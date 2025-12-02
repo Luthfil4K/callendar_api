@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = "mysql://root:@localhost:3306/db_antrian"
+}
+
+
+model tbl_queue {
+  id            Int             @id @default(autoincrement())
+  queueNumber   Int
+  status        QueueStatus     @default(PENDING)
+  createdAt     DateTime        @default(now())
+  date          DateTime
+  notifications tbl_notification_log[]
+}
+
+model tbl_notification_log {
+  id        Int         @id @default(autoincrement())
+  queueId   Int
+  message   String
+  status    NotifStatus @default(SENT)
+  createdAt DateTime    @default(now())
+
+  queue     tbl_queue   @relation(fields: [queueId], references: [id])
+}
+
+model tbl_daily_reset {
+  id         Int       @id @default(autoincrement())
+  date       DateTime  @unique
+  lastNumber Int
+  createdAt  DateTime  @default(now())
+}
+
+enum QueueStatus {
+  PENDING
+  CALLED
+  DONE
+  CANCELLED
+}
+
+enum NotifStatus {
+  SENT
+  FAILED
+}

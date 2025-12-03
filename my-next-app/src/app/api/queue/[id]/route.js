@@ -4,18 +4,18 @@ export async function GET(req, { params }) {
   try {
     const { id } = await params;
 
-    const created = new Date();
+    const nowWITA = new Date().toLocaleString("en-US", {
+      timeZone: "Asia/Makassar"
+    });
 
-    console.log("date");
-    console.log(id);
-    console.log("id");
-    console.log("id");
+    const created = new Date(nowWITA);
+   
     const data = await prisma.tbl_queue.create({
       data: {
         queueNumber: Number(id),
         status: "PENDING",
         createdAt: created,
-        date:created,
+        date: created,
       },
     });
 

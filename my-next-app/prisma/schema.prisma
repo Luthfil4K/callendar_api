@@ -13,6 +13,7 @@ model tbl_queue {
   queueNumber   Int
   status        QueueStatus     @default(PENDING)
   createdAt     DateTime        @default(now())
+  clearStatus   Int
   date          DateTime
   notifications tbl_notification_log[]
 }

@@ -16,7 +16,7 @@ const ScanPage = () => {
       try {
         const latest = await getLatestQueue();
         console.log("Latest queue:", latest);
-        const date = new Date(latest.createdAt);
+        const date = new Date(new Date(latest.createdAt).getTime() + 1000);
 
         const pad = (num) => String(num).padStart(2, "0");
 
@@ -29,7 +29,7 @@ const ScanPage = () => {
           pad(date.getUTCSeconds());
 
         console.log(formatted); 
-        setIdAntrian("localhost:3000/queue/"+formatted)
+        setIdAntrian("localhost:3000/api/queue/"+formatted)
       } catch (err) {
         console.error("Error fetching latest queue:", err);
       }
@@ -37,11 +37,11 @@ const ScanPage = () => {
 
     fetchLatestQueue();
   }, []);
-
+  console.log(idAntrian)
 
   return (
     <div className="flex items-center justify-center min-h-screen">
-      <QRCodeSVG value={`https://google.com`} />
+      <QRCodeSVG value={setIdAntrian} />
     </div>
   );
 };

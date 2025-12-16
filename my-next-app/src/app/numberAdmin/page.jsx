@@ -79,8 +79,8 @@ const ScanPage = () => {
     >
       <Grid container sx={{width:"100%"}} spacing={2}>
         {cards.map((card, index) => (
-          <Grid size={3}>
-            <Card sx={{minHeight:110}}> 
+          <Grid key={card.id} size={3}>
+            <Card key={card.id} sx={{minHeight:110}}> 
               <CardActionArea
                 onClick={() => setSelectedCard(index)}
                 data-active={selectedCard === index ? "" : undefined}

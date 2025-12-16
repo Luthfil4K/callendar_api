@@ -24,7 +24,7 @@ export async function GET(req, { params }) {
     const data = await prisma.tbl_queue.create({
       data: {
         queueNumber:Number(id),
-        clearStatus: clearStatus == 1 ? 1 : 2,
+        clearStatus: lastPending.clearStatus == 1 ? 1 : 2,
         status: "PENDING",
         createdAt: created,
         date: created,

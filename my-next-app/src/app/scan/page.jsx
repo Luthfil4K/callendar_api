@@ -34,14 +34,13 @@ const ScanPage = () => {
         console.error("Error fetching latest queue:", err);
       }
     };
-
     fetchLatestQueue();
   }, []);
-  console.log(idAntrian)
+  console.log("idAntrian", idAntrian)
 
   return (
     <div className="flex items-center justify-center min-h-screen">
-      <QRCodeSVG value={setIdAntrian} />
+      <QRCodeSVG value={`${idAntrian}`} />
     </div>
   );
 };

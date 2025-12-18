@@ -1,4 +1,5 @@
 "use client";
+import React from "react";
 
 import { useEffect, useState } from "react";
 import Card from "@mui/material/Card";
@@ -7,9 +8,12 @@ import CardActions from "@mui/material/CardActions";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
-import getQueueNumberUser from "../services/status";
+import getQueueNumberUser from "../../services/status";
 
-const ScanPage = () => {
+
+const QueueMember = ({params}) => {
+  const { id } = React.use(params);
+  
   const [tanggal, setTanggal] = useState(null);
   const [number, setNumber] = useState(null);
 
@@ -18,7 +22,6 @@ const ScanPage = () => {
       try {
         const damn = await getQueueNumberUser(4);
         console.log("damn")
-      
         setNumber(damn)
       } catch(error) {
         console.error("Gagal mengambil data:", error);
@@ -36,6 +39,9 @@ const ScanPage = () => {
           <Typography sx={{ color: "text.secondary", fontSize: 14 }}>
             Tanggal Hari Ini
           </Typography>
+          <Typography sx={{ color: "text.secondary", fontSize: 14 }}>
+            no antrian : {id}
+          </Typography>
 
           <Typography variant="h5" component="div">
             {"ssd"}
@@ -50,4 +56,4 @@ const ScanPage = () => {
   );
 };
 
-export default ScanPage;
+export default QueueMember;

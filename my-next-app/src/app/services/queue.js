@@ -1,7 +1,7 @@
 
 import api from '../lib/api';
 
-export const getQueueNumberAdmin = async (id) => {
+export const postQueueNumberAdmin = async (id) => {
   const res = await api.post(`/queue/${id}`);
   return res.data;
 };

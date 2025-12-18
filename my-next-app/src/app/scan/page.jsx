@@ -1,11 +1,12 @@
 "use client";
 
-import {useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import { QRCodeSVG } from "qrcode.react";
-import {getLatestQueue} from "../services/queue";
+import { getLatestQueue } from "../services/queue";
+   
 
 const ScanPage = () => {
-  const [idAntrian, setIdAntrian] = useState(0)
+  const [idAntrian, setIdAntrian] = useState(0);
   const waktu = new Date();
   const tanggal = waktu.getDate();
 
@@ -28,20 +29,22 @@ const ScanPage = () => {
           pad(date.getUTCMinutes()) +
           pad(date.getUTCSeconds());
 
-        console.log(formatted); 
-        setIdAntrian("localhost:3000/api/queue/"+formatted)
+        console.log(formatted);
+        setIdAntrian("http://localhost:3000/api/queue/" + formatted);
       } catch (err) {
         console.error("Error fetching latest queue:", err);
       }
     };
     fetchLatestQueue();
   }, []);
-  console.log("idAntrian", idAntrian)
+  console.log("idAntrian", idAntrian);
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <QRCodeSVG value={`${idAntrian}`} />
-    </div>
+    <>
+      <div className="flex items-center justify-center min-h-screen">
+        <QRCodeSVG value={`${idAntrian}`} />
+      </div>
+    </>
   );
 };
 

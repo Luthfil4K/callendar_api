@@ -10,11 +10,17 @@ import Box from "@mui/material/Box";
 import CardActionArea from "@mui/material/CardActionArea";
 import Grid from "@mui/material/Grid";
 import getQueueNumberUser from "../services/status";
+import { GetAllQueueTodayAdmin } from "../services/queue";
+
 
 const ScanPage = () => {
+  const [isLoading, setIsLoading] = useState(false)
+  const [allQueue, setAllQueue] = useState(0);
   const [selectedCard, setSelectedCard] = useState(0);
   const [tanggal, setTanggal] = useState(null);
   const [number, setNumber] = useState(null);
+
+  console.log
 
   const cards = [
     {
@@ -49,65 +55,87 @@ const ScanPage = () => {
     },
   ];
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const damn = await getQueueNumberUser(4);
+  //       console.log("damn");
+  //       setNumber(damn);
+  //     } catch (error) {
+  //       console.error("Gagal mengambil data:", error);
+  //     }
+  //   };
+  //   fetchData();
+  // }, []);
+
+
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const damn = await getQueueNumberUser(4);
-        console.log("damn");
+      setIsLoading(true);
 
-        setNumber(damn);
-      } catch (error) {
-        console.error("Gagal mengambil data:", error);
+      try {
+        const queue = await GetAllQueueTodayAdmin();
+        setAllQueue(queue);
+      } catch (err) {
+        console.error("Gagal mengambil data:", err);
+      } finally {
+        setIsLoading(false);
       }
     };
+
     fetchData();
   }, []);
-  useEffect(() => {}, []);
+
 
   return (
-    <Box
-      sx={{
-        width: "100%",
-        height:1000,
-        display: "flex",
-        padding:5,
-        gap: 2,
-        backgroundColor:'gray',
-        alignItems:"center",
-        justifyContent:"center"
-      }}
-    >
-      <Grid container sx={{width:"100%"}} spacing={2}>
-        {cards.map((card, index) => (
-          <Grid key={card.id} size={3}>
-            <Card key={card.id} sx={{minHeight:110}}> 
-              <CardActionArea
-                onClick={() => setSelectedCard(index)}
-                data-active={selectedCard === index ? "" : undefined}
-                sx={{
-                  height: "100%",
-                  "&[data-active]": {
-                    backgroundColor: "action.selected",
-                    "&:hover": {
-                      backgroundColor: "action.selectedHover",
-                    },
-                  },
-                }}
-              >
-                <CardContent sx={{ height: "100%" }}>
-                  <Typography variant="h5" component="div">
-                    {card.title}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {card.description}
-                  </Typography>
-                </CardContent>
-              </CardActionArea>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-    </Box>
+    isLoading ? <></> :
+      <Box
+        sx={{
+          width: "100%",
+          height: 1000,
+          display: "flex",
+          padding: 5,
+          gap: 2,
+          backgroundColor: 'gray',
+          alignItems: "center",
+          justifyContent: "center"
+        }}
+      >
+        <Grid container sx={{ width: "100%" }} spacing={2}>
+
+          {allQueue ?
+            allQueue.map((card, index) => (
+              <Grid key={card.id} size={{ md: 2, sm: 2, xs: 1 }}>
+                <Card key={card.id} sx={{ minHeight: 110, p: 2 }}>
+                  <CardActionArea
+                    onClick={() => setSelectedCard(index)}
+                    data-active={selectedCard === index ? "" : undefined}
+                    sx={{
+                      height: "100%",
+
+                    }}
+                  >
+                    <CardContent sx={{ height: "100%" }}>
+                      <Typography variant="h5" component="div">
+                        {card.queueNumber}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        {card.status}
+                      </Typography>
+                    </CardContent>
+                  </CardActionArea>
+                  <Grid container spacing={4}>
+
+                    <Button variant="outlined" color="success">Process</Button>
+                    <Button variant="outlined" color="error" >Delete</Button>
+                  </Grid>
+                </Card>
+              </Grid>
+            ))
+            : (<></>)}
+        </Grid>
+      </Box>
+
   );
 };
 

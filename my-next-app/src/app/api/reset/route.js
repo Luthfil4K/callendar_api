@@ -22,7 +22,7 @@ export async function GET(req, { params }) {
       where: {
         id,
         data: {
-          queueNumber: Number(id),
+          queueNumber: id.toString(),
           clearStatus: lastPending.clearStatus == 1 ? 1 : 2,
           status: "PENDING",
           createdAt: created,

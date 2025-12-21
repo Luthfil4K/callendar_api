@@ -3,7 +3,7 @@ import prisma from "../../../lib/prisma";
 
 export async function GET(req, { params }) {
   try {
-    const { id } = await params;   // <-- WAJIB PAKAI AWAIT
+    const { id } = await params;   
 
     const data = await prisma.tbl_queue.findMany({
       where: { id: Number(id) },

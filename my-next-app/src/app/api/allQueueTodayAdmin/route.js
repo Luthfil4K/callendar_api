@@ -18,20 +18,20 @@ export async function GET(req, { params }) {
     const awalUTC= new Date(awalWita.getTime() - witaOffset*60*60*1000)
     const akhirUTC = new Date(akhirWita.getTime() - witaOffset*60*60*1000)
 
-    const lastPending = await prisma.tbl_queue.findMany({
+    const queueToday = await prisma.tbl_queue.findMany({
       where: {
         status: "PENDING",
         createdAt: {
           gte: awalUTC,
-          lt: awalUTC,
+          lt: akhirUTC,
         }
       },
     });
 
-
-    return Response.json(lastPending, { status: 200 });
+    return Response.json(queueToday, { status: 200 });
   } catch (error) {
     console.error(error);
-    return Response.json({ error: "Gagal mengambil data" }, { status: 500 });
+    console.log(error);
+    return Response.json({ error: "Gagal mengambil data: ",error }, { status: 500 });
   }
 }

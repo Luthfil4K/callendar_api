@@ -10,10 +10,10 @@ datasource db {
 
 model tbl_queue {
   id            Int             @id @default(autoincrement())
-  queueNumber   Int
+  queueNumber   String
   status        QueueStatus     @default(PENDING)
-  createdAt     DateTime        @default(now())
   clearStatus   Int
+  createdAt     DateTime        @default(now())
   date          DateTime
   notifications tbl_notification_log[]
 }
@@ -22,6 +22,7 @@ model tbl_notification_log {
   id        Int         @id @default(autoincrement())
   queueId   Int
   message   String
+  clearStatus Int
   status    NotifStatus @default(SENT)
   createdAt DateTime    @default(now())
 

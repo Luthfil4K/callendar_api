@@ -15,3 +15,11 @@ export const GetAllQueueTodayAdmin  = async() => {
   const res = await api.get(`/allQueueTodayAdmin`);
   return res.data;
 };
+
+export const updateStatusByAdmin = async ({ id, type }) => {
+  return axios.patch('/api/admin/status', {
+    id,
+    type
+  })
+}
+

@@ -20,7 +20,7 @@ export async function GET(req, { params }) {
 
     const queueToday = await prisma.tbl_queue.findMany({
       where: {
-        status: "PENDING",
+        // status: "PENDING",
         createdAt: {
           gte: awalUTC,
           lt: akhirUTC,

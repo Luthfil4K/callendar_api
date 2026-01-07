@@ -10,5 +10,11 @@ export const getLastQueue = async (id) => {
   return res.data;
 };
 
+export const updateStatusByAdmin = async ({ id, type }) => {
+  return api.patch(`/admin/changeStatus/${id}`, {
+    type
+  });
+}
+
 
 export default getQueueNumberUser;

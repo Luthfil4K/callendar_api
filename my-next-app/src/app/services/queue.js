@@ -12,14 +12,13 @@ export const getLatestQueue  = async() => {
 };
 
 export const GetAllQueueTodayAdmin  = async() => {
-  const res = await api.get(`/allQueueTodayAdmin`);
+  const res = await api.get(`/admin/allQueueTodayAdmin`);
   return res.data;
 };
 
 export const updateStatusByAdmin = async ({ id, type }) => {
-  return axios.patch('/api/admin/status', {
-    id,
+  return api.patch(`/admin/changeStatus/${id}`, {
     type
-  })
+  });
 }
 

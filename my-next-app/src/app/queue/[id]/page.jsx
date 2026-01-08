@@ -8,6 +8,8 @@ import CardActions from "@mui/material/CardActions";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
+import CardGuest from "@/app/components/CardGuest";
+
 import getQueueNumberUser from "../../services/status";
 
 
@@ -34,24 +36,7 @@ const QueueMember = ({params}) => {
 
   return (
     <div className="flex items-center justify-center min-h-screen">
-      <Card sx={{ minWidth: 275 }}>
-        <CardContent>
-          <Typography sx={{ color: "text.secondary", fontSize: 14 }}>
-            Tanggal Hari Ini
-          </Typography>
-          <Typography sx={{ color: "text.secondary", fontSize: 14 }}>
-            no antrian : {id}
-          </Typography>
-
-          <Typography variant="h5" component="div">
-            {"ssd"}
-          </Typography>
-        </CardContent>
-
-        <CardActions>
-          <Button size="small">Learn More</Button>
-        </CardActions>
-      </Card>
+     <CardGuest></CardGuest>
     </div>
   );
 };

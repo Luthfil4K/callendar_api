@@ -3,18 +3,13 @@ import { updateStatusByAdmin } from "../services/status";
 
 import { Card, Typography, Grid, Button, Chip } from "@mui/material";
 
-const CardQueue = (data) => {
+const CardQueue = ({data,onUpdateStatus}) => {
   const [prime, setPrime] = useState(null);
 
   useEffect(() => {
-    setPrime(data.data);
-  }, [data.data]);
+    setPrime(data);
+  }, [data]);
 
-  console.log("data");
-  console.log(data.data);
-
-  console.log(prime);
-  console.log("prime");
 
   const toAmPm = (waktu) =>
     new Date(waktu).toLocaleString("en-US", {
@@ -33,6 +28,8 @@ const CardQueue = (data) => {
       ...prev,
       status: status,
     }));
+
+    onUpdateStatus(status)
   };
 
   const colorMap = {
@@ -52,7 +49,7 @@ const CardQueue = (data) => {
                 variant="contained"
                 color="success"
                 fullWidth
-                onClick={() => handleStatusByAdmin(data.data.id, "DONE")}
+                onClick={() => handleStatusByAdmin(data.id, "DONE")}
               >
                 Complete
               </Button>
@@ -68,7 +65,7 @@ const CardQueue = (data) => {
           <>
             <Grid size={{ md: 6, sm: 6, xs: 12 }} sx={{ display: "flex" }}>
               <Button
-                onClick={() => handleStatusByAdmin(data.data.id, "CALLED")}
+                onClick={() => handleStatusByAdmin(data.id, "CALLED")}
                 sx={{ borderRadius: 2 }}
                 fullWidth
                 color="info"
@@ -86,7 +83,7 @@ const CardQueue = (data) => {
                 color="error"
                 variant="outlined"
                 fullWidth
-                onClick={() => handleStatusByAdmin(data.data.id, "CANCELLED")}
+                onClick={() => handleStatusByAdmin(data.id, "CANCELLED")}
               >
                 Cancel
               </Button>
@@ -100,6 +97,7 @@ const CardQueue = (data) => {
   return (
     <Card
       sx={{
+        minWidth:200,
         height: 185,
         p: 2,
         borderRadius: 4,
@@ -120,13 +118,13 @@ const CardQueue = (data) => {
                 fontWeight={600}
                 sx={{ ontFamily: "Poppins, sans-serif" }}
               >
-                A-{data.data.id}
+                A-{data.id}
               </Typography>
               <Typography
                 variant="body2"
                 sx={{ fontFamily: "Poppins, sans-serif", color: "gray" }}
               >
-                {toAmPm(data.data.date)}
+                {toAmPm(data.date)}
               </Typography>
             </Grid>
             <Grid
@@ -136,12 +134,12 @@ const CardQueue = (data) => {
               <Chip
                 onClick={
                   canClick
-                    ? () => handleStatusByAdmin(data.data.id, "PENDING")
+                    ? () => handleStatusByAdmin(data.id, "PENDING")
                     : undefined
                 }
                 clickable={canClick}
                 color={colorMap[prime?.status] || "warning"}
-                label={prime?.status}
+                label={prime?.status=="PENDING"?"WAITING":prime?.status}
               />
             </Grid>
           </Grid>

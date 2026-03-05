@@ -68,7 +68,8 @@ const ScanPage = () => {
         sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
         container
       >
-        <Grid sx={{ maxWidth: 1200 }} size={{ md: 12, xs: 12 }}>
+        {/* <Grid sx={{backgroundColor:'gray', maxWidth: 1300 }} size={{ md: 12, xs: 12 }}> */}
+        <Grid sx={{ maxWidth: 1300 }} size={{ md: 12, xs: 12 }}>
           <Box>
             <Grid sx={{ marginTop: 4 }} container>
               <Grid sx={{ paddingLeft: 6 }} size={{ md: 6, xs: 6 }}>
@@ -120,6 +121,8 @@ const ScanPage = () => {
               justifyContent: "center",
             }}
           >
+
+            {/* dashboard card */}
             <Grid container display={"flex"} sx={{ width: "100%" }} spacing={2}>
               <Grid size={{ md: 4, sm: 12, xs: 12 }}>
                 <CardDashboard
@@ -150,6 +153,8 @@ const ScanPage = () => {
               </Grid>
             </Grid>
           </Box>
+
+          {/* filter  */}
           <Box sx={{ paddingX: 5 }}>
             {/* <Typography
               color="#353535ff"
@@ -187,7 +192,8 @@ const ScanPage = () => {
               justifyContent: "center",
             }}
           >
-            <Grid container>
+            {/* <Grid container sx={{backgroundColor:'green'}}> */}
+            <Grid container >
               <Grid size={{ md: 12, sm: 12, xs: 12 }}>
                 <Grid
                   container
@@ -197,7 +203,8 @@ const ScanPage = () => {
                 >
                   {filteredQueue ? (
                     filteredQueue.map((card, index) => (
-                      <Grid key={card.id} size={{ md: 4, sm: 12, xs: 12 }}>
+                      // <Grid sx={{backgroundColor:'red'}} key={card.id} size={{ md: 4, sm: 12, xs: 12 }}>
+                      <Grid  key={card.id} size={{ md: 4, sm: 12, xs: 12 }}>
                         <CardQueue
                           data={card}
                           onUpdateStatus={(newStatus) => {
@@ -205,8 +212,8 @@ const ScanPage = () => {
                               prev.map((q) =>
                                 q.id === card.id
                                   ? { ...q, status: newStatus }
-                                  : q
-                              )
+                                  : q,
+                              ),
                             );
                           }}
                         ></CardQueue>

@@ -1,7 +1,8 @@
 import api from "../lib/api";
 
-const getQueueNumberUser = async (id) => {
-  const res = await api.get(`/status/${id}`);
+const getGuestStatus = async (id) => {
+  console.log("id: "+id)
+  const res = await api.get(`/guestStatus/${id}`);
   return res.data;
 };
 
@@ -17,4 +18,5 @@ export const updateStatusByAdmin = async ({ id, type }) => {
 }
 
 
-export default getQueueNumberUser;
+
+export default getGuestStatus;

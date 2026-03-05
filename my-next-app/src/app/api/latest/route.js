@@ -13,6 +13,10 @@ export async function GET(req, { params }) {
       },
     });
 
+    console.log("lastPending")
+    console.log(lastPending)
+    console.log("lastPending")
+
     return Response.json(lastPending, { status: 200 });
   } catch (error) {
     console.error(error);

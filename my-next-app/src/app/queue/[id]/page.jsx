@@ -1,44 +1,65 @@
 "use client";
-import React from "react";
-
-import { useEffect, useState } from "react";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-
+import React, { useEffect, useState } from "react";
+import Box from "@mui/material/Box";
 import CardGuest from "@/app/components/CardGuest";
+import getGuestStatus from "../../services/status";
+import { socket } from "@/socket";
 
-import getQueueNumberUser from "../../services/status";
+const Queue = ({ params }) => {
+  const { id } = React.use(params)
 
+  const [guestData, setGuestData] = useState(null);
 
-const QueueMember = ({params}) => {
-  const { id } = React.use(params);
-  
-  const [tanggal, setTanggal] = useState(null);
-  const [number, setNumber] = useState(null);
-
+  // 🔹 Ambil data pertama kali
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const damn = await getQueueNumberUser(4);
-        console.log("damn")
-        setNumber(damn)
-      } catch(error) {
+        const data = await getGuestStatus(id);
+        setGuestData(data);
+      } catch (error) {
         console.error("Gagal mengambil data:", error);
       }
     };
-    fetchData();
-  }, []);
-  useEffect(() => {}, []);
 
+    fetchData();
+  }, [id]);
+
+  //  Listener realtime
+  useEffect(() => {
+    function handleQueueUpdate(data) {
+      // 
+      if (data.queueNumber === id) {
+        setGuestData((prev) => ({
+          ...prev,
+          status: data.status,
+        }));
+      }
+    }
+
+    socket.on("queue-updated", handleQueueUpdate);
+
+    return () => {
+      socket.off("queue-updated", handleQueueUpdate);
+    };
+  }, [id]);
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
-     <CardGuest></CardGuest>
-    </div>
+    <Box
+      sx={{
+        overflowX: "hidden",
+        minHeight: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundImage: "url('/bg_white1.jpg')",
+        backgroundSize: "cover",
+      }}
+    >
+      <div className="flex items-center justify-center min-h-screen">
+        <CardGuest data={guestData} />
+      </div>
+    </Box>
   );
 };
 
-export default QueueMember;
+export default Queue;

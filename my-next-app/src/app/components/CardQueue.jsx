@@ -3,19 +3,19 @@ import { updateStatusByAdmin } from "../services/status";
 
 import { Card, Typography, Grid, Button, Chip } from "@mui/material";
 
-const CardQueue = ({data,onUpdateStatus}) => {
+const CardQueue = ({ data, onUpdateStatus }) => {
   const [prime, setPrime] = useState(null);
 
   useEffect(() => {
     setPrime(data);
   }, [data]);
 
-
   const toAmPm = (waktu) =>
     new Date(waktu).toLocaleString("en-US", {
       hour: "2-digit",
       minute: "2-digit",
       hour12: true,
+      timeZone: "Asia/Jakarta", // WAJIB TAMBAH INI
     });
 
   const handleStatusByAdmin = async (id, status) => {
@@ -29,7 +29,7 @@ const CardQueue = ({data,onUpdateStatus}) => {
       status: status,
     }));
 
-    onUpdateStatus(status)
+    onUpdateStatus(status);
   };
 
   const colorMap = {
@@ -97,7 +97,7 @@ const CardQueue = ({data,onUpdateStatus}) => {
   return (
     <Card
       sx={{
-        minWidth:200,
+        minWidth: 200,
         height: 185,
         p: 2,
         borderRadius: 4,
@@ -118,7 +118,16 @@ const CardQueue = ({data,onUpdateStatus}) => {
                 fontWeight={600}
                 sx={{ ontFamily: "Poppins, sans-serif" }}
               >
-                A-{data.id}
+                {data?.jenisLayananId == 1
+                  ? "A"
+                  : data?.jenisLayananId == 2
+                    ? "B"
+                    : data?.jenisLayananId == 3
+                      ? "C"
+                      : data?.jenisLayananId == 4
+                        ? "D"
+                        : ""}
+                -{String(data?.dailyQueueNumber).padStart(3, "0")}
               </Typography>
               <Typography
                 variant="body2"
@@ -139,7 +148,7 @@ const CardQueue = ({data,onUpdateStatus}) => {
                 }
                 clickable={canClick}
                 color={colorMap[prime?.status] || "warning"}
-                label={prime?.status=="PENDING"?"WAITING":prime?.status}
+                label={prime?.status == "PENDING" ? "WAITING" : prime?.status}
               />
             </Grid>
           </Grid>

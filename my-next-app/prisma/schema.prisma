@@ -9,31 +9,43 @@ datasource db {
 
 
 model tbl_queue {
-  id            Int             @id @default(autoincrement())
-  queueNumber   String
-  status        QueueStatus     @default(PENDING)
-  clearStatus   Int
-  createdAt     DateTime        @default(now())
-  date          DateTime
-  notifications tbl_notification_log[]
+  id                Int                @id @default(autoincrement())
+  queueNumber       String
+  status            QueueStatus        @default(PENDING)
+  clearStatus       Int
+  createdAt         DateTime           @default(now())
+  date              DateTime
+  dailyQueueNumber  Int
+
+  jenisLayananId    Int
+  jenisLayanan      tbl_jenis_layanan  @relation(fields: [jenisLayananId], references: [id])
+
+  notifications     tbl_notification_log[]
+}
+
+model tbl_jenis_layanan {
+  id                Int          @id @default(autoincrement())
+  jenisLayanan      String
+
+  tblQueue          tbl_queue[]
 }
 
 model tbl_notification_log {
-  id        Int         @id @default(autoincrement())
-  queueId   Int
-  message   String
-  clearStatus Int
-  status    NotifStatus @default(SENT)
-  createdAt DateTime    @default(now())
-
-  queue     tbl_queue   @relation(fields: [queueId], references: [id])
+id                  Int                       @id @default(autoincrement())
+queueId             Int             
+message             String              
+clearStatus         Int             
+status              NotifStatus               @default(SENT)
+createdAt           DateTime                  @default(now())
+    
+queue               tbl_queue                 @relation(fields: [queueId], references: [id])
 }
 
 model tbl_daily_reset {
-  id         Int       @id @default(autoincrement())
-  date       DateTime  @unique
-  lastNumber Int
-  createdAt  DateTime  @default(now())
+  id                Int                       @id @default(autoincrement())
+  date              DateTime                  @unique
+  lastNumber        Int               
+  createdAt         DateTime                  @default(now())
 }
 
 enum QueueStatus {

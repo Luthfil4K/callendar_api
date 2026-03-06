@@ -55,7 +55,7 @@ const CardScanQR = ({ dataQueue, data, openModal }) => {
 
         <div className="flex justify-center">
           <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-6 shadow-xl">
-            <QRCodeSVG size={210} value={`${process.env.LOCAL_URL}/jenisLayanan/`+ data || ""} />
+            <QRCodeSVG size={210} value={`${process.env.NEXT_PUBLIC_LOCAL_URL}/jenisLayanan/`+ data || ""} />
           </div>
         </div>
 

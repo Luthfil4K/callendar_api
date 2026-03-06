@@ -22,7 +22,7 @@ const CardQueue = ({ data, onUpdateStatus }) => {
       hour: "2-digit",
       minute: "2-digit",
       hour12: true,
-      timeZone: "Asia/Jakarta", // WAJIB TAMBAH INI
+      timeZone: "Asia/Makassar", // 
     });
 
   const handleStatusByAdmin = async (id, status) => {

@@ -18,19 +18,26 @@ export default function CardServiceSelect({ params }) {
   const { id } = React.use(params);
 
   const router = useRouter();
-  const [selectedLayanan, setSelectedLayanan] = useState(null);
+  const [selectedLayanan, setSelectedLayanan] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  const toggleLayanan = (serviceId) => {
+    setSelectedLayanan((prev) =>
+      prev.includes(serviceId)
+        ? prev.filter((id) => id !== serviceId)
+        : [...prev, serviceId]
+    );
+  };
+
   const handleButton = async () => {
-    if (!selectedLayanan) return;
+    if (selectedLayanan.length === 0) return;
 
     try {
       setLoading(true);
 
       await postQueueNumberAdmin(id, selectedLayanan);
 
-      router.push(`http://localhost:3000/queue/`+id);
-
+      router.push(`http://localhost:3000/queue/` + id);
     } catch (error) {
       console.error("Gagal ambil antrian:", error);
     } finally {
@@ -58,8 +65,8 @@ export default function CardServiceSelect({ params }) {
               icon={service.icon}
               name={service.name}
               description={service.description}
-              isSelected={selectedLayanan === service.id}
-              onClick={() => setSelectedLayanan(service.id)}
+              isSelected={selectedLayanan.includes(service.id)}
+              onClick={() => toggleLayanan(service.id)}
             />
           ))}
         </div>
@@ -70,7 +77,7 @@ export default function CardServiceSelect({ params }) {
 
         <button
           onClick={handleButton}
-          disabled={!selectedLayanan || loading}
+          disabled={selectedLayanan.length === 0 || loading}
           className="w-full bg-orange-600 hover:bg-orange-700 disabled:bg-gray-400 text-white font-semibold py-4 rounded-xl transition-all duration-300 transform hover:shadow-lg active:scale-95 text-lg"
         >
           {loading ? "Memproses..." : "Ambil Antrian"}

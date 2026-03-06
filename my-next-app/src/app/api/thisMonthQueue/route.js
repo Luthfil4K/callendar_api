@@ -17,7 +17,7 @@ export async function GET(req, { params }) {
     const awalUTC = new Date(awalBulanWita.getTime() - witaOffset * 60 * 60 * 1000)
     const akhirUTC = new Date(akhirBulanWita.getTime() - witaOffset * 60 * 60 * 1000)
 
-    const queueThisMonth = await prisma.tbl_queue.findMany({
+    const queueThisMonth = await prisma.tbl_queue_digital.findMany({
       where: {
         createdAt: {
           gte: awalUTC,
@@ -25,7 +25,7 @@ export async function GET(req, { params }) {
         }
       },
       include: {
-        jenisLayanan: true,
+        layanan:true,
       }
     });
 

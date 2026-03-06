@@ -3,10 +3,9 @@
 import CardServiceInside from "./CardServiceInside";
 import { Divider, Box } from "@mui/material";
 import { useRouter } from "next/navigation";
-import {useState} from 'react'
+import { useState } from "react";
 
-import {postQueueNumberAdmin} from "../services/queue"
-
+import { postQueueNumberAdmin } from "../services/queue";
 
 const services = [
   {
@@ -35,25 +34,30 @@ const services = [
   },
 ];
 
-export default function CardServiceSelect({
-  isModalOpen,
-  setIsModalOpen,
-  id,
-}) {
+export default function CardServiceSelect({ isModalOpen, setIsModalOpen, id }) {
   const router = useRouter();
-  const [selectedService, setSelectedService] = useState(null);
+  const [selectedService, setSelectedService] = useState([]);
 
   if (!isModalOpen) return null;
 
   const handleButton = async () => {
-    if (!selectedService) return;
+    if (selectedService.length === 0) return;
 
     try {
       await postQueueNumberAdmin(id, selectedService);
-      router.push(`http://localhost:3000/queue/`+id);
+      router.push(`http://localhost:3000/queue/` + id);
     } catch (error) {
       console.error("Gagal ambil antrian:", error);
     }
+  };
+
+  const toggleService = (serviceId) => {
+    setSelectedService(
+      (prev) =>
+        prev.includes(serviceId)
+          ? prev.filter((id) => id !== serviceId) // hapus jika sudah ada
+          : [...prev, serviceId], // tambah jika belum ada
+    );
   };
 
   return (
@@ -75,8 +79,8 @@ export default function CardServiceSelect({
               icon={service.icon}
               name={service.name}
               description={service.description}
-              isSelected={selectedService === service.id}
-              onClick={() => setSelectedService(service.id)}
+              onClick={() => toggleService(service.id)}
+              isSelected={selectedService.includes(service.id)}
             />
           ))}
         </div>
@@ -87,7 +91,7 @@ export default function CardServiceSelect({
 
         <button
           onClick={handleButton}
-          disabled={!selectedService}
+          disabled={selectedService.length === 0}
           className={`w-full py-4 rounded-xl font-semibold text-lg transition-all duration-300 transform
             ${
               selectedService

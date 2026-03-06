@@ -4,8 +4,13 @@ import { useState, useEffect } from "react";
 import { getAllQueueMonth } from "../services/queue";
 
 import { Card, Grid, Box, Typography } from "@mui/material";
-import { DataGrid, GridToolBar } from "@mui/x-data-grid";
 
+import dynamic from "next/dynamic";
+
+const DataGrid = dynamic(
+  () => import("@mui/x-data-grid").then((mod) => mod.DataGrid),
+  { ssr: false },
+);
 
 import PaidIcon from "@mui/icons-material/Paid";
 import SupportAgentIcon from "@mui/icons-material/SupportAgent";
@@ -13,6 +18,8 @@ import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 
 const RekapLayanan = () => {
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
+  const [selectedYear, setSelectedYear] = useState(2026);
   const [monthlyData, setMonthlyData] = useState([]);
 
   useEffect(() => {
@@ -35,27 +42,12 @@ const RekapLayanan = () => {
     fetchData();
   }, []);
 
-  const totalBerbayar = monthlyData.filter(
-    (item) => item.jenisLayananId === 1,
-  ).length;
-
-  const totalKonsultasi = monthlyData.filter(
-    (item) => item.jenisLayananId === 2,
-  ).length;
-
-  const totalRekomendasi = monthlyData.filter(
-    (item) => item.jenisLayananId === 3,
-  ).length;
-
-  const totalPerpustakaan = monthlyData.filter(
-    (item) => item.jenisLayananId === 4,
-  ).length;
-
-  console.log("monthlyData");
-  console.log(monthlyData);
-  console.log(monthlyData);
-  console.log(monthlyData);
-  console.log("monthlyData");
+  const layananMap = {
+    1: "Produk Statistik Berbayar",
+    2: "Konsultasi Statistik",
+    3: "Rekomendasi Statistik",
+    4: "Layanan Perpustakaan",
+  };
 
   const columns = [
     {
@@ -77,9 +69,22 @@ const RekapLayanan = () => {
     {
       field: "jenisLayanan",
       headerName: "Jenis Layanan",
-      width: 220,
-      valueGetter: (value, row) => row.jenisLayanan?.jenisLayanan,
+      width: 300,
+      valueGetter: (params, row) => {
+        const layanan = row.layanan;
+
+        if (!layanan) return "-";
+
+        if (Array.isArray(layanan)) {
+          return layanan
+            .map((l) => layananMap[l.jenisLayananId] || "-")
+            .join("; ");
+        }
+
+        return layananMap[layanan.jenisLayananId] || "-";
+      },
     },
+
     {
       field: "status",
       headerName: "Status",
@@ -87,28 +92,83 @@ const RekapLayanan = () => {
     },
 
     {
-      field: "createdAt",
-      headerName: "Tanggal",
-      width: 200,
-      valueFormatter: (params) => {
-        if (!params.value) return "";
-        const date = new Date(params.value);
+  field: "createdAt",
+  headerName: "Tanggal",
+  width: 220,
+  valueFormatter: (value) => {
+    if (!value) return "-";
 
-        // Gunakan nilai manual agar hasilnya konsisten di server & client
-        const day = String(date.getDate()).padStart(2, "0");
-        const month = String(date.getMonth() + 1).padStart(2, "0");
-        const year = date.getFullYear();
-        const hours = String(date.getHours()).padStart(2, "0");
-        const minutes = String(date.getMinutes()).padStart(2, "0");
+    const date = new Date(value);
 
-        return `${day}/${month}/${year} ${hours}:${minutes}`;
-      },
-    },
+    const tanggal = date.toLocaleDateString("id-ID", {
+      timeZone: "Asia/Makassar",
+    });
+
+    const waktu = date.toLocaleTimeString("id-ID", {
+      timeZone: "Asia/Makassar",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+
+    return `${tanggal}, ${waktu} WITA`;
+  },
+}
   ];
+
+  const getJenisLayananId = (layanan) => {
+    if (Array.isArray(layanan)) {
+      return layanan?.[0]?.jenisLayananId;
+    }
+    return layanan?.jenisLayananId;
+  };
+
+  console.log("monthlyData");
+  console.log(monthlyData);
+  console.log(monthlyData);
+  console.log("monthlyData");
+
+  const filteredData = monthlyData.filter((item) => {
+    const date = new Date(item.createdAt);
+
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+
+    return month === selectedMonth && year === selectedYear;
+  });
+
+  const totalBerbayar = filteredData.filter((item) =>
+    Array.isArray(item.layanan)
+      ? item.layanan.some((l) => l.jenisLayananId === 1)
+      : item.layanan?.jenisLayananId === 1,
+  ).length;
+
+  const totalKonsultasi = filteredData.filter((item) =>
+    Array.isArray(item.layanan)
+      ? item.layanan.some((l) => l.jenisLayananId === 2)
+      : item.layanan?.jenisLayananId === 2,
+  ).length;
+
+  const totalRekomendasi = filteredData.filter((item) =>
+    Array.isArray(item.layanan)
+      ? item.layanan.some((l) => l.jenisLayananId === 3)
+      : item.layanan?.jenisLayananId === 3,
+  ).length;
+
+  const totalPerpustakaan = filteredData.filter((item) =>
+    Array.isArray(item.layanan)
+      ? item.layanan.some((l) => l.jenisLayananId === 4)
+      : item.layanan?.jenisLayananId === 4,
+  ).length;
 
   return (
     <>
-      <Grid container justifyContent="center" sx={{ mx: 8,height:800}} mt={4}>
+      <Grid
+        container
+        justifyContent="center"
+        sx={{ mx: 2, height: 800 }}
+        mt={4}
+      >
         <Grid
           size={{ md: 12, xs: 12 }}
           sx={{
@@ -128,16 +188,28 @@ const RekapLayanan = () => {
           <Typography
             variant="h3"
             mb={2}
-            sx={{ color:"#3c495c", fontWeight: 600 }}
+            sx={{ color: "#3c495c", fontWeight: 600 }}
           >
-            Rekap Layanan Bulan Ini
+            Rekap Layanan
           </Typography>
         </Grid>
 
-        <Grid container spacing={3} sx={{ px: 8, mb: 4 }}>
+        <Grid container spacing={3} sx={{ px: 0, mb: 4 }}>
           {/* Produk Statistik Berbayar */}
-          <Grid size={{ md: 3, xs: 12 }}>
-            <Card sx={{ p: 3, display: "flex", alignItems: "center", gap: 2, borderRadius:'12px', boxShadow:"0 4px 12px rgba(0,0,0,0.15)", minHeight:120, maxHeight:170 }}>
+          <Grid size={{ md: 6, xs: 12 }}>
+            <Card
+              sx={{
+                p: 3,
+                display: "flex",
+                alignItems: "center",
+                gap: 2,
+                borderRadius: "12px",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                minHeight: 120,
+                maxHeight: 170,
+                minWidth: 170,
+              }}
+            >
               <PaidIcon sx={{ fontSize: 40, color: "#2e7d32" }} />
               <Box>
                 <Typography variant="body2" color="text.secondary">
@@ -151,8 +223,20 @@ const RekapLayanan = () => {
           </Grid>
 
           {/* Konsultasi Statistik */}
-          <Grid size={{ md: 3, xs: 12 }}>
-            <Card sx={{ p: 3, display: "flex", alignItems: "center", gap: 2, borderRadius:'12px', boxShadow:"0 4px 12px rgba(0,0,0,0.15)", minHeight:120, maxHeight:170 }}>
+          <Grid size={{ md: 6, xs: 12 }}>
+            <Card
+              sx={{
+                p: 3,
+                display: "flex",
+                alignItems: "center",
+                gap: 2,
+                borderRadius: "12px",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                minHeight: 120,
+                maxHeight: 170,
+                minWidth: 170,
+              }}
+            >
               <SupportAgentIcon sx={{ fontSize: 40, color: "#1976d2" }} />
               <Box>
                 <Typography variant="body2" color="text.secondary">
@@ -166,8 +250,20 @@ const RekapLayanan = () => {
           </Grid>
 
           {/* Rekomendasi Statistik */}
-          <Grid size={{ md: 3, xs: 12 }}>
-            <Card sx={{ p: 3, display: "flex", alignItems: "center", gap: 2, borderRadius:'12px', boxShadow:"0 4px 12px rgba(0,0,0,0.15)", minHeight:120, maxHeight:170 }}>
+          <Grid size={{ md: 6, xs: 12 }}>
+            <Card
+              sx={{
+                p: 3,
+                display: "flex",
+                alignItems: "center",
+                gap: 2,
+                borderRadius: "12px",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                minHeight: 120,
+                maxHeight: 170,
+                minWidth: 170,
+              }}
+            >
               <AssignmentTurnedInIcon sx={{ fontSize: 40, color: "#ed6c02" }} />
               <Box>
                 <Typography variant="body2" color="text.secondary">
@@ -181,8 +277,20 @@ const RekapLayanan = () => {
           </Grid>
 
           {/* Perpustakaan */}
-          <Grid size={{ md: 3, xs: 12 }}>
-            <Card sx={{ p: 3, display: "flex", alignItems: "center", gap: 2, borderRadius:'12px', boxShadow:"0 4px 12px rgba(0,0,0,0.15)", minHeight:120, maxHeight:170 }}>
+          <Grid size={{ md: 6, xs: 12 }}>
+            <Card
+              sx={{
+                p: 3,
+                display: "flex",
+                alignItems: "center",
+                gap: 2,
+                borderRadius: "12px",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                minHeight: 120,
+                maxHeight: 170,
+                minWidth: 170,
+              }}
+            >
               <MenuBookIcon sx={{ fontSize: 40, color: "#9c27b0" }} />
               <Box>
                 <Typography variant="body2" color="text.secondary">
@@ -195,11 +303,77 @@ const RekapLayanan = () => {
             </Card>
           </Grid>
         </Grid>
-        <Grid size={{ md: 12, xs: 12 }} sx={{ px: 8 }}>
-          <Card sx={{ boxShadow: "0 6px 20px rgba(0,0,0,0.15)", p: 3 }}>
+        <Grid size={{ md: 12, xs: 12 }}>
+          <Grid container spacing={2} sx={{ alignItems:'center', justifyContent:'center'}}>
+            <Grid size={{ md: 2, xs: 4 }}>
+              <select
+                value={selectedMonth}
+                onChange={(e) => setSelectedMonth(Number(e.target.value))}
+                style={{
+                  padding: 10,
+                  width: "100%",
+                  color: "black",
+                  border: "1px solid black",
+                  borderRadius: 6,
+                  backgroundColor: "white",
+                  fontSize: 14,
+                }}
+              >
+                {[
+                  "Januari",
+                  "Februari",
+                  "Maret",
+                  "April",
+                  "Mei",
+                  "Juni",
+                  "Juli",
+                  "Agustus",
+                  "September",
+                  "Oktober",
+                  "November",
+                  "Desember",
+                ].map((bulan, index) => (
+                  <option key={index} value={index + 1}>
+                    {bulan}
+                  </option>
+                ))}
+              </select>
+            </Grid>
+          
+          <Grid size={{ md: 2, xs: 4 }}>
+            <select
+              value={selectedYear}
+              onChange={(e) => setSelectedYear(Number(e.target.value))}
+              style={{
+                padding: 10,
+                width: "100%",
+                color: "black",
+                border: "1px solid black",
+                borderRadius: 6,
+                backgroundColor: "white",
+                fontSize: 14,
+              }}
+            >
+              {[2024, 2025, 2026, 2027].map((year) => (
+                <option key={year} value={year}>
+                  {year}
+                </option>
+              ))}
+            </select>
+          </Grid>
+          </Grid>
+        </Grid>
+        <Grid size={{ md: 12, xs: 12 }} sx={{ px: 2 }}>
+          <Card
+            sx={{
+              boxShadow: "0 6px 20px rgba(0,0,0,0.15)",
+              p: 3,
+              minWidth: 300,
+            }}
+          >
             <Box sx={{ height: 600, width: "100%" }}>
               <DataGrid
-                rows={monthlyData}
+                rows={filteredData}
                 columns={columns}
                 pageSizeOptions={[10, 20, 30]}
                 initialState={{
@@ -208,15 +382,13 @@ const RekapLayanan = () => {
                   },
                 }}
                 disableRowSelectionOnClick
-                showToolbar 
+                showToolbar
               />
             </Box>
           </Card>
         </Grid>
         <Grid size={{ md: 12, xs: 12 }}>
-            <Box sx={{ height: 100, width: "100%" }}>
-            
-            </Box>
+          <Box sx={{ height: 100, width: "100%" }}></Box>
         </Grid>
       </Grid>
     </>

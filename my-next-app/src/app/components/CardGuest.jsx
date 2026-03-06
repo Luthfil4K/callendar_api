@@ -18,12 +18,21 @@ const pulse = keyframes`
 `;
 
 const CardGuest = ({ data }) => {
-  const [prime, setPrime] = useState(0);
+  const [prime, setPrime] = useState(null);
+  const [jenisLayananId, setJenisLayananId] = useState(null);
 
   useEffect(() => {
     setPrime(data);
+
+    const layananId = Array.isArray(data?.layanan)
+      ? data?.layanan?.[0]?.jenisLayananId
+      : data?.layanan?.jenisLayananId;
+
+    setJenisLayananId(layananId);
+
   }, [data]);
   console.log(data ? data : "notFairy");
+
   return (
     <Card
       sx={{
@@ -32,9 +41,9 @@ const CardGuest = ({ data }) => {
         height: 555,
         p: 2,
         borderRadius: 4,
-        border: "1px solid #e0e0e0", 
-        boxShadow:"0 5px 10px rgba(0,0,0,0.15)",
-        transition: "all 0.3s ease", 
+        border: "1px solid #e0e0e0",
+        boxShadow: "0 5px 10px rgba(0,0,0,0.15)",
+        transition: "all 0.3s ease",
         "&:hover": {
           boxShadow: "0 6px 20px rgba(0,0,0,0.15)",
         },
@@ -94,11 +103,11 @@ const CardGuest = ({ data }) => {
               },
             }}
           >
-            {prime?.jenisLayananId == 1
+            {jenisLayananId == 1
               ? "A"
-              : prime?.jenisLayananId == 2
+              : jenisLayananId == 2
                 ? "B"
-                : prime?.jenisLayananId == 3
+                : jenisLayananId == 3
                   ? "C"
                   : "D"}
             -{String(prime?.dailyQueueNumber).padStart(3, "0")}

@@ -4,8 +4,9 @@ export async function GET(req, { params }) {
   try {
     const { id } = await params;
 
-    const data = await prisma.tbl_queue.findFirst({
+    const data = await prisma.tbl_queue_digital.findFirst({
       where: { queueNumber: id.toString()},
+      include:{layanan:true}
       
     });
     console.log("id: ", id);

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { getLatestQueue } from "../services/queue";
 import { GetAllQueueToday } from "../services/queue";
 
-import { Card, Typography, Grid, Button, Chip } from "@mui/material";
+import { Card, Box, Typography, Grid, Button, Chip } from "@mui/material";
 import CardScanQR from "../components/CardScanQR";
 import CardScanQueue from "../components/CardScanQueue";
 import CardServiceSelect from "../components/CardServiceSelect";
@@ -120,15 +120,71 @@ const ScanPage = () => {
           alignItems: "center",
           backgroundImage: "url('/bg_white1.jpg')",
           backgroundSize: "cover",
+
+          // backgroundColor:'green'
         }}
       >
+        <Grid size={{ xs: 12, md: 12 }}>
+          <Grid container sx={{ height: 60, px: 8 }}>
+            <Grid
+              size={{
+                xs: 6,
+                md: 6,
+                display: "flex",
+                alignItems: "start",
+                justifyContent: "start",
+              }}
+            >
+              <Box
+                sx={{
+                  height: 50,
+                  backgroundSize: "contain",
+                  backgroundRepeat: "no-repeat",
+                  backgroundPosition: "left center",
+                  backgroundImage: "url('/logoBPSBali.png')",
+                }}
+              ></Box>
+            </Grid>
+            <Grid
+              size={{ xs: 6, md: 6 }}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "flex-end",
+                gap: 2, // jarak antar logo
+              }}
+            >
+              <Box
+                sx={{
+                  width: 120,
+                  height: 50,
+                  backgroundSize: "contain",
+                  backgroundRepeat: "no-repeat",
+                  backgroundPosition: "center",
+                  backgroundImage: "url('/PSTdanNarasi.png')",
+                }}
+              />
+
+              <Box
+                sx={{
+                  width: 120,
+                  height: 50,
+                  backgroundSize: "contain",
+                  backgroundRepeat: "no-repeat",
+                  backgroundPosition: "center",
+                  backgroundImage: "url('/logo_se_samping.png')",
+                }}
+              />
+            </Grid>
+          </Grid>
+        </Grid>
         <Grid
           size={{ xs: 6, md: 6 }}
           sx={{
             p: 3,
             display: "flex",
             justifyContent: "end",
-            alignItems: "center",
+            aligntItems: "start",
           }}
         >
           <CardScanQueue dataQueue={getQueueData ? getQueueData : "kosong"} />
@@ -138,8 +194,8 @@ const ScanPage = () => {
           sx={{
             p: 3,
             display: "flex",
+            aligntItems: "start",
             justifyContent: "start",
-            alignItems: "center",
           }}
         >
           <CardScanQR data={idAntrian} openModal={() => setIsModalOpen(true)} />

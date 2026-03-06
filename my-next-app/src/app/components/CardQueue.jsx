@@ -5,9 +5,16 @@ import { Card, Typography, Grid, Button, Chip } from "@mui/material";
 
 const CardQueue = ({ data, onUpdateStatus }) => {
   const [prime, setPrime] = useState(null);
+  const [jenisLayananId, setJenisLayananId] = useState(null);
 
   useEffect(() => {
     setPrime(data);
+
+    const layananId = Array.isArray(data?.layanan)
+      ? data?.layanan?.[0]?.jenisLayananId
+      : data?.layanan?.jenisLayananId;
+
+    setJenisLayananId(layananId);
   }, [data]);
 
   const toAmPm = (waktu) =>
@@ -63,10 +70,13 @@ const CardQueue = ({ data, onUpdateStatus }) => {
       default:
         return (
           <>
-            <Grid size={{ md: 6, sm: 6, xs: 12 }} sx={{ display: "flex" }}>
+            <Grid
+              size={{ md: 6, sm: 6, xs: 12 }}
+              sx={{ marginBottom: 1, display: "flex", paddingX: 1 }}
+            >
               <Button
                 onClick={() => handleStatusByAdmin(data.id, "CALLED")}
-                sx={{ borderRadius: 2 }}
+                sx={{ borderRadius: 2, boxShadow: 0 }}
                 fullWidth
                 color="info"
                 variant="contained"
@@ -76,7 +86,7 @@ const CardQueue = ({ data, onUpdateStatus }) => {
             </Grid>
             <Grid
               size={{ md: 6, sm: 6, xs: 12 }}
-              sx={{ display: "flex", paddingX: 1 }}
+              sx={{ marginBottom: 1, display: "flex", paddingX: 1 }}
             >
               <Button
                 sx={{ borderRadius: 2 }}
@@ -98,7 +108,7 @@ const CardQueue = ({ data, onUpdateStatus }) => {
     <Card
       sx={{
         minWidth: 200,
-        height: 185,
+        height: 195,
         p: 2,
         borderRadius: 4,
         border: "1px solid #e0e0e0", // abu-abu border
@@ -118,16 +128,14 @@ const CardQueue = ({ data, onUpdateStatus }) => {
                 fontWeight={600}
                 sx={{ ontFamily: "Poppins, sans-serif" }}
               >
-                {data?.jenisLayananId == 1
+                {jenisLayananId == 1
                   ? "A"
-                  : data?.jenisLayananId == 2
+                  : jenisLayananId == 2
                     ? "B"
-                    : data?.jenisLayananId == 3
+                    : jenisLayananId == 3
                       ? "C"
-                      : data?.jenisLayananId == 4
-                        ? "D"
-                        : ""}
-                -{String(data?.dailyQueueNumber).padStart(3, "0")}
+                      : "D"}
+                -{String(prime?.dailyQueueNumber).padStart(3, "0")}
               </Typography>
               <Typography
                 variant="body2"
@@ -155,7 +163,7 @@ const CardQueue = ({ data, onUpdateStatus }) => {
         </Grid>
         <Grid
           sx={{
-            height: 70,
+            height: 90,
             flexDirection: "column",
             display: "flex",
             justifyContent: "end",

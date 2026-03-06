@@ -4,10 +4,13 @@ export async function GET(req, { params }) {
   try {
     const { id } = await params;
 
-    const lastPending = await prisma.tbl_queue.findFirst({
+    const lastPending = await prisma.tbl_queue_digital.findFirst({
       orderBy: {
         createdAt: "desc",
       },
+      include:{
+        layanan:true
+      }
     });
 
     console.log(lastPending);
@@ -18,7 +21,7 @@ export async function GET(req, { params }) {
 
     const created = new Date(nowWITA);
 
-    const data = await prisma.tbl_queue.update({
+    const data = await prisma.tbl_queue_digital.update({
       where: {
         id,
         data: {

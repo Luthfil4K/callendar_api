@@ -4,7 +4,7 @@ export async function GET(req, { params, value}) {
   try {
     const { id } = await params;
 
-    const handleUpdate = await prisma.tbl_queue.update({
+    const handleUpdate = await prisma.tbl_queue_digital.update({
       where: {
         id,
         data: { 

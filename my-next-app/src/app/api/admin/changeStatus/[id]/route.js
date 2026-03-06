@@ -16,12 +16,12 @@ export async function PATCH(req, { params }) {
       );
     }
 
-    const result = await prisma.tbl_queue.update({
+    const result = await prisma.tbl_queue_digital.update({
       where: { id: Number(id) },
       data: { status: type },
     });
 
-    // 🔥 Emit realtime
+    //  Emit realtime
     if (global.io) {
       global.io.emit("queue-updated", {
         id: result.id,

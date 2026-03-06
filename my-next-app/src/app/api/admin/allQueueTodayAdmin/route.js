@@ -18,14 +18,16 @@ export async function GET(req, { params }) {
     const awalUTC= new Date(awalWita.getTime() - witaOffset*60*60*1000)
     const akhirUTC = new Date(akhirWita.getTime() - witaOffset*60*60*1000)
 
-    const queueToday = await prisma.tbl_queue.findMany({
+    const queueToday = await prisma.tbl_queue_digital.findMany({
       where: {
-        // status: "PENDING",
         createdAt: {
           gte: awalUTC,
           lt: akhirUTC,
         }
       },
+      include:{
+        layanan:true,
+      }
     });
 
     return Response.json(queueToday, { status: 200 });

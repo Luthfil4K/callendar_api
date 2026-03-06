@@ -17,7 +17,10 @@ import CardQueue from "../components/CardQueue";
 import CardDashboard from "../components/CardDashboard";
 import { FormControl, MenuItem, Select, InputLabel } from "@mui/material";
 
+import { io } from "socket.io-client";
+
 const ScanPage = () => {
+  const socket = io(process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:3000");
   const [statusFilter, setStatusFilter] = useState("ALL");
 
   const [waiting, setWaiting] = useState(0);
@@ -34,6 +37,7 @@ const ScanPage = () => {
 
     return allQueue.filter((q) => q.status === statusFilter);
   }, [allQueue, statusFilter]);
+
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -58,6 +62,18 @@ const ScanPage = () => {
     setCalled(countCalled);
     setDone(countDone);
   }, [allQueue]);
+
+  useEffect(() => {
+  socket.on("post-queue", (newQueue) => {
+    setAllQueue((prev) => [newQueue, ...prev]);
+  });
+
+  return () => {
+    socket.off("post-queue");
+  };
+}, []);
+
+console.log(filteredQueue)
 
   return isLoading ? (
     <></>
@@ -192,7 +208,6 @@ const ScanPage = () => {
               justifyContent: "center",
             }}
           >
-            {/* <Grid container sx={{backgroundColor:'green'}}> */}
             <Grid container >
               <Grid size={{ md: 12, sm: 12, xs: 12 }}>
                 <Grid
@@ -203,8 +218,7 @@ const ScanPage = () => {
                 >
                   {filteredQueue ? (
                     filteredQueue.map((card, index) => (
-                      // <Grid sx={{backgroundColor:'red'}} key={card.id} size={{ md: 4, sm: 12, xs: 12 }}>
-                      <Grid  key={card.id} size={{ md: 4, sm: 12, xs: 12 }}>
+                      <Grid  key={card?.id} size={{ md: 6, sm: 12, xs: 12 }}>
                         <CardQueue
                           data={card}
                           onUpdateStatus={(newStatus) => {

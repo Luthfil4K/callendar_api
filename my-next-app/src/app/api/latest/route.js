@@ -4,7 +4,7 @@ export async function GET(req, { params }) {
   try {
 
 
-    const lastPending = await prisma.tbl_queue.findFirst({
+    const lastPending = await prisma._digital.findFirst({
       where: {
         status: "PENDING",
       },

@@ -45,7 +45,7 @@ export default function CardServiceSelect({ isModalOpen, setIsModalOpen, id }) {
 
     try {
       await postQueueNumberAdmin(id, selectedService);
-      router.push(`http://localhost:3000/queue/` + id);
+      router.push(`${process.env.LOCAL_URL}/queue/` + id);
     } catch (error) {
       console.error("Gagal ambil antrian:", error);
     }

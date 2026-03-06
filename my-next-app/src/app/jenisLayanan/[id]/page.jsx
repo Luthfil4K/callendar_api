@@ -37,7 +37,7 @@ export default function CardServiceSelect({ params }) {
 
       await postQueueNumberAdmin(id, selectedLayanan);
 
-      router.push(`http://localhost:3000/queue/` + id);
+      router.push(`${process.env.LOCAL_URL}/queue/` + id);
     } catch (error) {
       console.error("Gagal ambil antrian:", error);
     } finally {

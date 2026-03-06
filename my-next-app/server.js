@@ -31,6 +31,6 @@ app.prepare().then(() => {
   });
 
   httpServer.listen(3000, () => {
-    console.log("Ready on http://localhost:3000");
+    console.log("Ready on ",process.env.LOCAL_URL || "http://localhost:3000");
   });
 });

@@ -69,7 +69,7 @@ const RekapLayanan = () => {
     {
       field: "jenisLayanan",
       headerName: "Jenis Layanan",
-      width: 300,
+      width: 700,
       valueGetter: (params, row) => {
         const layanan = row.layanan;
 
@@ -163,234 +163,254 @@ const RekapLayanan = () => {
 
   return (
     <>
-      <Grid
-        container
-        justifyContent="center"
-        sx={{ mx: 2, height: 800 }}
-        mt={4}
+      <Box
+        sx={{
+          overflowX: "hidden",
+          minHeight: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundImage: "url('/bg_white1.jpg')",
+          backgroundSize: "cover",
+        }}
       >
         <Grid
-          size={{ md: 12, xs: 12 }}
+          container
+          justifyContent="center"
           sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+            mx: 2,
           }}
-        ></Grid>
-        <Grid
-          size={{ md: 12, xs: 12 }}
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
+          mt={4}
         >
-          <Typography
-            variant="h3"
-            mb={2}
-            sx={{ color: "#3c495c", fontWeight: 600 }}
-          >
-            Rekap Layanan
-          </Typography>
-        </Grid>
-
-        <Grid container spacing={3} sx={{ px: 0, mb: 4 }}>
-          {/* Produk Statistik Berbayar */}
-          <Grid size={{ md: 6, xs: 12 }}>
-            <Card
-              sx={{
-                p: 3,
-                display: "flex",
-                alignItems: "center",
-                gap: 2,
-                borderRadius: "12px",
-                boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-                minHeight: 120,
-                maxHeight: 170,
-                minWidth: 170,
-              }}
-            >
-              <PaidIcon sx={{ fontSize: 40, color: "#2e7d32" }} />
-              <Box>
-                <Typography variant="body2" color="text.secondary">
-                  Produk Statistik Berbayar
-                </Typography>
-                <Typography variant="h5" fontWeight="bold">
-                  {totalBerbayar}
-                </Typography>
-              </Box>
-            </Card>
-          </Grid>
-
-          {/* Konsultasi Statistik */}
-          <Grid size={{ md: 6, xs: 12 }}>
-            <Card
-              sx={{
-                p: 3,
-                display: "flex",
-                alignItems: "center",
-                gap: 2,
-                borderRadius: "12px",
-                boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-                minHeight: 120,
-                maxHeight: 170,
-                minWidth: 170,
-              }}
-            >
-              <SupportAgentIcon sx={{ fontSize: 40, color: "#1976d2" }} />
-              <Box>
-                <Typography variant="body2" color="text.secondary">
-                  Konsultasi Statistik
-                </Typography>
-                <Typography variant="h5" fontWeight="bold">
-                  {totalKonsultasi}
-                </Typography>
-              </Box>
-            </Card>
-          </Grid>
-
-          {/* Rekomendasi Statistik */}
-          <Grid size={{ md: 6, xs: 12 }}>
-            <Card
-              sx={{
-                p: 3,
-                display: "flex",
-                alignItems: "center",
-                gap: 2,
-                borderRadius: "12px",
-                boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-                minHeight: 120,
-                maxHeight: 170,
-                minWidth: 170,
-              }}
-            >
-              <AssignmentTurnedInIcon sx={{ fontSize: 40, color: "#ed6c02" }} />
-              <Box>
-                <Typography variant="body2" color="text.secondary">
-                  Rekomendasi Statistik
-                </Typography>
-                <Typography variant="h5" fontWeight="bold">
-                  {totalRekomendasi}
-                </Typography>
-              </Box>
-            </Card>
-          </Grid>
-
-          {/* Perpustakaan */}
-          <Grid size={{ md: 6, xs: 12 }}>
-            <Card
-              sx={{
-                p: 3,
-                display: "flex",
-                alignItems: "center",
-                gap: 2,
-                borderRadius: "12px",
-                boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
-                minHeight: 120,
-                maxHeight: 170,
-                minWidth: 170,
-              }}
-            >
-              <MenuBookIcon sx={{ fontSize: 40, color: "#9c27b0" }} />
-              <Box>
-                <Typography variant="body2" color="text.secondary">
-                  Layanan Perpustakaan
-                </Typography>
-                <Typography variant="h5" fontWeight="bold">
-                  {totalPerpustakaan}
-                </Typography>
-              </Box>
-            </Card>
-          </Grid>
-        </Grid>
-        <Grid size={{ md: 12, xs: 12 }}>
-          <Grid container spacing={2} sx={{ alignItems:'center', justifyContent:'center'}}>
-            <Grid size={{ md: 2, xs: 4 }}>
-              <select
-                value={selectedMonth}
-                onChange={(e) => setSelectedMonth(Number(e.target.value))}
-                style={{
-                  padding: 10,
-                  width: "100%",
-                  color: "black",
-                  border: "1px solid black",
-                  borderRadius: 6,
-                  backgroundColor: "white",
-                  fontSize: 14,
-                }}
-              >
-                {[
-                  "Januari",
-                  "Februari",
-                  "Maret",
-                  "April",
-                  "Mei",
-                  "Juni",
-                  "Juli",
-                  "Agustus",
-                  "September",
-                  "Oktober",
-                  "November",
-                  "Desember",
-                ].map((bulan, index) => (
-                  <option key={index} value={index + 1}>
-                    {bulan}
-                  </option>
-                ))}
-              </select>
-            </Grid>
-          
-          <Grid size={{ md: 2, xs: 4 }}>
-            <select
-              value={selectedYear}
-              onChange={(e) => setSelectedYear(Number(e.target.value))}
-              style={{
-                padding: 10,
-                width: "100%",
-                color: "black",
-                border: "1px solid black",
-                borderRadius: 6,
-                backgroundColor: "white",
-                fontSize: 14,
-              }}
-            >
-              {[2024, 2025, 2026, 2027].map((year) => (
-                <option key={year} value={year}>
-                  {year}
-                </option>
-              ))}
-            </select>
-          </Grid>
-          </Grid>
-        </Grid>
-        <Grid size={{ md: 12, xs: 12 }} sx={{ px: 2 }}>
-          <Card
+          <Grid
+            size={{ md: 12, xs: 12 }}
             sx={{
-              boxShadow: "0 6px 20px rgba(0,0,0,0.15)",
-              p: 3,
-              minWidth: 300,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          ></Grid>
+          <Grid
+            size={{ md: 12, xs: 12 }}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
-            <Box sx={{ height: 600, width: "100%" }}>
-              <DataGrid
-                rows={filteredData}
-                columns={columns}
-                pageSizeOptions={[10, 20, 30]}
-                initialState={{
-                  pagination: {
-                    paginationModel: { pageSize: 10, page: 0 },
-                  },
+            <Typography
+              variant="h3"
+              mb={2}
+              sx={{ color: "#3c495c", fontWeight: 600 }}
+            >
+              Rekap Layanan
+            </Typography>
+          </Grid>
+
+          <Grid container spacing={3} sx={{ px: 0, mb: 4 }}>
+            {/* Produk Statistik Berbayar */}
+            <Grid size={{ md: 6, xs: 12 }}>
+              <Card
+                sx={{
+                  p: 3,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 2,
+                  borderRadius: "12px",
+                  boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                  minHeight: 120,
+                  maxHeight: 170,
+                  minWidth: 170,
                 }}
-                disableRowSelectionOnClick
-                showToolbar
-              />
-            </Box>
-          </Card>
+              >
+                <PaidIcon sx={{ fontSize: 40, color: "#2e7d32" }} />
+                <Box>
+                  <Typography variant="body2" color="text.secondary">
+                    Produk Statistik Berbayar
+                  </Typography>
+                  <Typography variant="h5" fontWeight="bold">
+                    {totalBerbayar}
+                  </Typography>
+                </Box>
+              </Card>
+            </Grid>
+
+            {/* Konsultasi Statistik */}
+            <Grid size={{ md: 6, xs: 12 }}>
+              <Card
+                sx={{
+                  p: 3,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 2,
+                  borderRadius: "12px",
+                  boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                  minHeight: 120,
+                  maxHeight: 170,
+                  minWidth: 170,
+                }}
+              >
+                <SupportAgentIcon sx={{ fontSize: 40, color: "#1976d2" }} />
+                <Box>
+                  <Typography variant="body2" color="text.secondary">
+                    Konsultasi Statistik
+                  </Typography>
+                  <Typography variant="h5" fontWeight="bold">
+                    {totalKonsultasi}
+                  </Typography>
+                </Box>
+              </Card>
+            </Grid>
+
+            {/* Rekomendasi Statistik */}
+            <Grid size={{ md: 6, xs: 12 }}>
+              <Card
+                sx={{
+                  p: 3,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 2,
+                  borderRadius: "12px",
+                  boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                  minHeight: 120,
+                  maxHeight: 170,
+                  minWidth: 170,
+                }}
+              >
+                <AssignmentTurnedInIcon
+                  sx={{ fontSize: 40, color: "#ed6c02" }}
+                />
+                <Box>
+                  <Typography variant="body2" color="text.secondary">
+                    Rekomendasi Statistik
+                  </Typography>
+                  <Typography variant="h5" fontWeight="bold">
+                    {totalRekomendasi}
+                  </Typography>
+                </Box>
+              </Card>
+            </Grid>
+
+            {/* Perpustakaan */}
+            <Grid size={{ md: 6, xs: 12 }}>
+              <Card
+                sx={{
+                  p: 3,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 2,
+                  borderRadius: "12px",
+                  boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+                  minHeight: 120,
+                  maxHeight: 170,
+                  minWidth: 170,
+                }}
+              >
+                <MenuBookIcon sx={{ fontSize: 40, color: "#9c27b0" }} />
+                <Box>
+                  <Typography variant="body2" color="text.secondary">
+                    Layanan Perpustakaan
+                  </Typography>
+                  <Typography variant="h5" fontWeight="bold">
+                    {totalPerpustakaan}
+                  </Typography>
+                </Box>
+              </Card>
+            </Grid>
+          </Grid>
+          <Grid size={{ md: 12, xs: 12 }} sx={{marginBottom:4}}>
+            <Grid
+              container
+              spacing={2}
+              sx={{ alignItems: "center", justifyContent: "center" }}
+            >
+              <Grid size={{ md: 2, xs: 4 }}>
+                <select
+                  value={selectedMonth}
+                  onChange={(e) => setSelectedMonth(Number(e.target.value))}
+                  style={{
+                    padding: 10,
+                    width: "100%",
+                    color: "black",
+                    border: "1px solid black",
+                    borderRadius: 6,
+                    backgroundColor: "white",
+                    fontSize: 14,
+                  }}
+                >
+                  {[
+                    "Januari",
+                    "Februari",
+                    "Maret",
+                    "April",
+                    "Mei",
+                    "Juni",
+                    "Juli",
+                    "Agustus",
+                    "September",
+                    "Oktober",
+                    "November",
+                    "Desember",
+                  ].map((bulan, index) => (
+                    <option key={index} value={index + 1}>
+                      {bulan}
+                    </option>
+                  ))}
+                </select>
+              </Grid>
+
+              <Grid size={{ md: 2, xs: 4 }}>
+                <select
+                  value={selectedYear}
+                  onChange={(e) => setSelectedYear(Number(e.target.value))}
+                  style={{
+                    padding: 10,
+                    width: "100%",
+                    color: "black",
+                    border: "1px solid black",
+                    borderRadius: 6,
+                    backgroundColor: "white",
+                    fontSize: 14,
+                  }}
+                >
+                  {[2024, 2025, 2026, 2027].map((year) => (
+                    <option key={year} value={year}>
+                      {year}
+                    </option>
+                  ))}
+                </select>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid size={{ md: 12, xs: 12 }} sx={{ px: 2 }}>
+            <Card
+              sx={{
+                boxShadow: "0 6px 20px rgba(0,0,0,0.15)",
+                p: 3,
+                minWidth: 300,
+              }}
+            >
+              <Box sx={{ height: 600, width: "100%" }}>
+                <DataGrid
+                  rows={filteredData}
+                  columns={columns}
+                  pageSizeOptions={[10, 20, 30]}
+                  initialState={{
+                    pagination: {
+                      paginationModel: { pageSize: 10, page: 0 },
+                    },
+                  }}
+                  disableRowSelectionOnClick
+                  showToolbar
+                />
+              </Box>
+            </Card>
+          </Grid>
+          <Grid size={{ md: 12, xs: 12 }}>
+            <Box sx={{ height: 100, width: "100%" }}></Box>
+          </Grid>
         </Grid>
-        <Grid size={{ md: 12, xs: 12 }}>
-          <Box sx={{ height: 100, width: "100%" }}></Box>
-        </Grid>
-      </Grid>
+      </Box>
     </>
   );
 };
